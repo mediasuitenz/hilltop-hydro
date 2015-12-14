@@ -57,13 +57,18 @@ var getData = R.pipe(
   then(getDatumsFromResponse)
 )
 
+/**
+ * Get all sites for a measurmenet
+ * @param {String} Name of ameasurement IE 'MR_Water'
+ * @return {[Object]} Array of the form {name: <string> }
+ */
 var getSitesForMeasurement = R.pipe(
   getFromApi('SiteList', null, R.__, null, null, null),
   then(
     R.pipe(
       R.path(['HilltopServer', 'Site']),
       R.map(d => {
-        return {name: d['$'].Name }
+        return { name: d['$'].Name }
       })
     )
   )
@@ -72,12 +77,12 @@ var getSitesForMeasurement = R.pipe(
 function getDatumsFromResponse (result) {
   return result.Hilltop.Measurement[0].Data[0].E
     .map((point) => {
-      return { time: point.T[0], value: point['I1'][0]}
+      return {time: point.T[0], value: point['I1'][0]}
     })
 }
 
 module.exports = {
   url: API_URL,
   getData: getData,
-  getSitesForMeasurement: getSitesForMeasurement,
+  getSitesForMeasurement: getSitesForMeasurement
 }

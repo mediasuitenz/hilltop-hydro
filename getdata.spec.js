@@ -1,5 +1,5 @@
 'use strict'
-/* global Given, Then, describe */
+/* global Given, When, Then, describe */
 const expect = require('chai').expect
 const nock = require('nock')
 const fs = require('fs')
@@ -37,9 +37,8 @@ describe('when using getData', () => {
       fs.readFile('./test-fixtures/getData.xml', 'utf8', (err, xmlData) => {
         if (err) {
           console.error('error getting test fixture', err)
-          throw err
           done(err)
-          return
+          throw err
         }
         mockHttp = nock(hostname)
           // .log(console.log)
@@ -77,7 +76,7 @@ describe('when using getData', () => {
       expect(failCase).not.to.exist
       mockHttp.done()
     })
-    Then('it should returned an array of datums', () => {
+    Then('it should return an array of datums', () => {
       expect(successCase).to.exist
 
       successCase.forEach(datum => {

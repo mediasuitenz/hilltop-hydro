@@ -1,8 +1,20 @@
 {
-  "name": "@mediasuite/hilltophydro",
-  "version": "1.0.0",
+  "name": "hilltop-hydro",
+  "version": "0.1.0",
   "description": "An api wrapper for the hilltop hydro service",
   "main": "index.js",
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/mediasuitenz/hilltop-hydro"
+  },
+  "bugs": {
+    "url": "https://github.com/mediasuitenz/ramda-extended/issues"
+  },
+  "homepage": "http://mediasuitenz.github.io/hilltop-hydro/",
+  "maintainers": {
+    "name": "Ersin Buckley",
+    "email": "ersinbuckley@gmail.com"
+  },
   "scripts": {
     "deploy:patch": "npm run test && npm run docs && node_modules/.bin/xyz -i patch",
     "deploy:minor": "npm run test && npm run docs && node_modules/.bin/xyz -i minor",
@@ -12,7 +24,7 @@
     "test:watch": "node_modules/.bin/testem"
   },
   "author": "Mediasuite NZ",
-  "license": "",
+  "license": "MIT",
   "dependencies": {
     "chalk": "^1.1.1",
     "debug": "^2.2.0",

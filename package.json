@@ -7,7 +7,7 @@
     "deploy:patch": "npm run test && npm run docs && node_modules/.bin/xyz -i patch",
     "deploy:minor": "npm run test && npm run docs && node_modules/.bin/xyz -i minor",
     "deploy:major": "npm run test && npm run docs && node_modules/.bin/xyz -i major",
-    "docs": "docco index.js",
+    "docs": "docco -o . index.js",
     "test": "node_modules/.bin/mocha -u mocha-given --compilers js:mocha-babel *.spec.js",
     "test:watch": "node_modules/.bin/testem"
   },

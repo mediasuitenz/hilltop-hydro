@@ -1,0 +1,7 @@
+launchers:
+  Node:
+    command: node_modules/.bin/mocha -u mocha-given --compilers js:mocha-babel *.spec.js
+launch_in_dev:
+  - Node
+src_files:
+  - "*.js"

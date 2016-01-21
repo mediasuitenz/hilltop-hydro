@@ -5,7 +5,7 @@ Provides api access to a hilltop API service, see http://www.hilltop.co.nz/
 ## Installation
 
 ```
-npm install --save @mediasuitenz/hilltophydro
+npm install --save hilltop-hydro
 ```
 
 ## Usage

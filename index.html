@@ -2,7 +2,7 @@
 
 <html>
 <head>
-  <title>index.js</title>
+  <title>hilltop hydro</title>
   <meta http-equiv="content-type" content="text/html; charset=UTF-8">
   <meta name="viewport" content="width=device-width, target-densitydpi=160dpi, initial-scale=1.0; maximum-scale=1.0; user-scalable=0;">
   <link rel="stylesheet" media="all" href="docco.css" />
@@ -13,12 +13,6 @@
     
     <ul class="sections">
         
-          <li id="title">
-              <div class="annotation">
-                  <h1>index.js</h1>
-              </div>
-          </li>
-        
         
         
         <li id="section-1">
@@ -27,33 +21,23 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-1">&#182;</a>
               </div>
-              
+              <h1 id="hilltop-hydro">hilltop hydro</h1>
+<p>Provides api access to a hilltop API service, see <a href="http://www.hilltop.co.nz/">http://www.hilltop.co.nz/</a></p>
+<h2 id="installation">Installation</h2>
+<pre><code>npm install --save @mediasuitenz/hilltophydro
+</code></pre><h2 id="debugging">Debugging</h2>
+<p>Use <code>DEBUG=hilltophydro node &lt;yourApp&gt;</code> to enable tracing for the hilltop module</p>
+
             </div>
             
             <div class="content"><div class='highlight'><pre><span class="hljs-meta">'use strict'</span>
 <span class="hljs-keyword">var</span> R = <span class="hljs-built_in">require</span>(<span class="hljs-string">'ramda'</span>)
 <span class="hljs-keyword">var</span> request = <span class="hljs-built_in">require</span>(<span class="hljs-string">'request'</span>)
 <span class="hljs-keyword">var</span> xml = <span class="hljs-built_in">require</span>(<span class="hljs-string">'xml2js'</span>)
-<span class="hljs-keyword">var</span> chalk = <span class="hljs-built_in">require</span>(<span class="hljs-string">'chalk'</span>)</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-2">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-2">&#182;</a>
-              </div>
-              <p>Use <code>DEBUG=hilltop node &lt;yourApp&gt;</code> to enable tracing for the hilltop module</p>
-
-            </div>
-            
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> debug = <span class="hljs-built_in">require</span>(<span class="hljs-string">'debug'</span>)(<span class="hljs-string">'hilltop'</span>)
+<span class="hljs-keyword">var</span> chalk = <span class="hljs-built_in">require</span>(<span class="hljs-string">'chalk'</span>)
+<span class="hljs-keyword">var</span> debug = <span class="hljs-built_in">require</span>(<span class="hljs-string">'debug'</span>)(<span class="hljs-string">'hilltophydro'</span>)
 
 <span class="hljs-keyword">var</span> then = R.curry((cb, p) =&gt; p.then(cb))
-
-<span class="hljs-keyword">const</span> API_URL = <span class="hljs-string">'http://hydro.marlborough.govt.nz/data.hts'</span>
 
 <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">parseXmlString</span> (<span class="hljs-params">dataString</span>) </span>{
   <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>((resolve, reject) =&gt; {
@@ -69,42 +53,20 @@
       }
     })
   })
-}
-
-<span class="hljs-keyword">var</span> getFromApi = R.curry(<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">requestType, site, measurement, from, to, interval</span>) </span>{
-  <span class="hljs-keyword">var</span> defaultQsParams = {
-    Service: <span class="hljs-string">'Hilltop'</span>,
-    Request: requestType
-  }
-  debug(chalk.blue(<span class="hljs-string">'requestType: '</span>, requestType, <span class="hljs-string">'\nsite: '</span>, site, <span class="hljs-string">'\nmeasurement: '</span>, measurement, <span class="hljs-string">'\nfrom: '</span>, <span class="hljs-keyword">from</span>, <span class="hljs-string">'\nto: '</span>, to, <span class="hljs-string">'\ninterval: '</span>, interval))
-
-  <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>((resolve, reject) =&gt; {
-    <span class="hljs-keyword">let</span> queryParams = <span class="hljs-built_in">Object</span>.assign(defaultQsParams, {
-      Site: site,
-      Measurement: measurement,
-      From: <span class="hljs-keyword">from</span>,
-      To: to,
-      Interval: interval
-    })
-    request(API_URL, {
-      method: <span class="hljs-string">'get'</span>,
-      qs: queryParams
-    }, (err, response, body) =&gt; {
-      <span class="hljs-keyword">if</span> (err) {
-        reject(err)
-      } <span class="hljs-keyword">else</span> {
-        resolve(body)
-      }
-    })
-  }).then(parseXmlString)
-})
-
-<span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getDatumsFromResponse</span> (<span class="hljs-params">result</span>) </span>{
-  <span class="hljs-keyword">return</span> result.Hilltop.Measurement[<span class="hljs-number">0</span>].Data[<span class="hljs-number">0</span>].E
-    .map((point) =&gt; {
-      <span class="hljs-keyword">return</span> {time: point.T[<span class="hljs-number">0</span>], value: point[<span class="hljs-string">'I1'</span>][<span class="hljs-number">0</span>]}
-    })
 }</pre></div></div>
+            
+        </li>
+        
+        
+        <li id="section-2">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-2">&#182;</a>
+              </div>
+              <h2 id="config-options">Config options</h2>
+
+            </div>
             
         </li>
         
@@ -115,9 +77,47 @@
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-3">&#182;</a>
               </div>
-              <h2 id="get-data-for-a-site">Get Data for a site</h2>
+              <ul>
+<li>API_URL this is the hostname + endpoint for the hilltop service</li>
+</ul>
 
             </div>
+            
+            <div class="content"><div class='highlight'><pre><span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">buildLibrary</span> (<span class="hljs-params">API_URL</span>) </span>{
+  <span class="hljs-keyword">var</span> getFromApi = R.curry(<span class="hljs-function"><span class="hljs-keyword">function</span> (<span class="hljs-params">requestType, site, measurement, from, to, interval</span>) </span>{
+    <span class="hljs-keyword">var</span> defaultQsParams = {
+      Service: <span class="hljs-string">'Hilltop'</span>,
+      Request: requestType
+    }
+    debug(chalk.blue(<span class="hljs-string">'\nurl: '</span>, API_URL, <span class="hljs-string">'\nrequestType: '</span>, requestType, <span class="hljs-string">'\nsite: '</span>, site, <span class="hljs-string">'\nmeasurement: '</span>, measurement, <span class="hljs-string">'\nfrom: '</span>, <span class="hljs-keyword">from</span>, <span class="hljs-string">'\nto: '</span>, to, <span class="hljs-string">'\ninterval: '</span>, interval))
+
+    <span class="hljs-keyword">return</span> <span class="hljs-keyword">new</span> <span class="hljs-built_in">Promise</span>((resolve, reject) =&gt; {
+      <span class="hljs-keyword">let</span> queryParams = <span class="hljs-built_in">Object</span>.assign(defaultQsParams, {
+        Site: site,
+        Measurement: measurement,
+        From: <span class="hljs-keyword">from</span>,
+        To: to,
+        Interval: interval
+      })
+      request(API_URL, {
+        method: <span class="hljs-string">'get'</span>,
+        qs: queryParams
+      }, (err, response, body) =&gt; {
+        <span class="hljs-keyword">if</span> (err) {
+          reject(err)
+        } <span class="hljs-keyword">else</span> {
+          resolve(body)
+        }
+      })
+    }).then(parseXmlString)
+  })
+
+  <span class="hljs-function"><span class="hljs-keyword">function</span> <span class="hljs-title">getDatumsFromResponse</span> (<span class="hljs-params">result</span>) </span>{
+    <span class="hljs-keyword">return</span> result.Hilltop.Measurement[<span class="hljs-number">0</span>].Data[<span class="hljs-number">0</span>].E
+      .map((point) =&gt; {
+        <span class="hljs-keyword">return</span> {time: point.T[<span class="hljs-number">0</span>], value: point[<span class="hljs-string">'I1'</span>][<span class="hljs-number">0</span>]}
+      })
+  }</pre></div></div>
             
         </li>
         
@@ -127,6 +127,19 @@
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-4">&#182;</a>
+              </div>
+              <h2 id="get-data-for-a-site">Get Data for a site</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-5">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-5">&#182;</a>
               </div>
               <p>get data for a measurement, this function is curried</p>
 <p><code>site -&gt; measurement -&gt; from -&gt; to -&gt; Promise&lt;[]datums&gt;</code></p>
@@ -153,23 +166,10 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> getData = R.pipe(
-  getFromApi(<span class="hljs-string">'GetData'</span>),
-  then(getDatumsFromResponse)
-)</pre></div></div>
-            
-        </li>
-        
-        
-        <li id="section-5">
-            <div class="annotation">
-              
-              <div class="pilwrap ">
-                <a class="pilcrow" href="#section-5">&#182;</a>
-              </div>
-              <h2 id="get-all-sites-for-a-measurmenet">Get all sites for a measurmenet</h2>
-
-            </div>
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">var</span> getData = R.pipe(
+    getFromApi(<span class="hljs-string">'GetData'</span>),
+    then(getDatumsFromResponse)
+  )</pre></div></div>
             
         </li>
         
@@ -179,6 +179,19 @@
               
               <div class="pilwrap ">
                 <a class="pilcrow" href="#section-6">&#182;</a>
+              </div>
+              <h2 id="get-all-sites-for-a-measurmenet">Get all sites for a measurmenet</h2>
+
+            </div>
+            
+        </li>
+        
+        
+        <li id="section-7">
+            <div class="annotation">
+              
+              <div class="pilwrap ">
+                <a class="pilcrow" href="#section-7">&#182;</a>
               </div>
               <p><code>measurement -&gt; Promise&lt;[]sites&gt;</code></p>
 <p>params:</p>
@@ -199,23 +212,26 @@
 
             </div>
             
-            <div class="content"><div class='highlight'><pre><span class="hljs-keyword">var</span> getSitesForMeasurement = R.pipe(
-  getFromApi(<span class="hljs-string">'SiteList'</span>, <span class="hljs-literal">null</span>, R.__, <span class="hljs-literal">null</span>, <span class="hljs-literal">null</span>, <span class="hljs-literal">null</span>),
-  then(
-    R.pipe(
-      R.path([<span class="hljs-string">'HilltopServer'</span>, <span class="hljs-string">'Site'</span>]),
-      R.map(d =&gt; {
-        <span class="hljs-keyword">return</span> { name: d[<span class="hljs-string">'$'</span>].Name }
-      })
+            <div class="content"><div class='highlight'><pre>  <span class="hljs-keyword">var</span> getSitesForMeasurement = R.pipe(
+    getFromApi(<span class="hljs-string">'SiteList'</span>, <span class="hljs-literal">null</span>, R.__, <span class="hljs-literal">null</span>, <span class="hljs-literal">null</span>, <span class="hljs-literal">null</span>),
+    then(
+      R.pipe(
+        R.path([<span class="hljs-string">'HilltopServer'</span>, <span class="hljs-string">'Site'</span>]),
+        R.map(d =&gt; {
+          <span class="hljs-keyword">return</span> { name: d[<span class="hljs-string">'$'</span>].Name }
+        })
+      )
     )
   )
-)
 
-<span class="hljs-built_in">module</span>.exports = {
-  url: API_URL,
-  getData: getData,
-  getSitesForMeasurement: getSitesForMeasurement
-}</pre></div></div>
+  <span class="hljs-keyword">return</span> {
+    url: API_URL,
+    getData: getData,
+    getSitesForMeasurement: getSitesForMeasurement
+  }
+}
+
+<span class="hljs-built_in">module</span>.exports = buildLibrary</pre></div></div>
             
         </li>
         

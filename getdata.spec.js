@@ -3,14 +3,16 @@
 const expect = require('chai').expect
 const nock = require('nock')
 const fs = require('fs')
-const hostname = 'http://hydro.marlborough.govt.nz'
+const mockHostname = 'http://mockhostforhilltop.wat'
+const mockDataAPIEndpoint = '/data.hts'
+const hostname = mockHostname + mockDataAPIEndpoint
 
 describe('when using getData', () => {
   var ht
   var mockHttp
 
   Given(() => {
-    ht = require('./index')
+    ht = require('./index')(hostname)
   })
   Then('It should have a hilltop object', () => expect(ht).to.exist)
   Then('It should have a getDataFunction', () => expect(ht.getData).to.be.a('function'))
@@ -40,9 +42,9 @@ describe('when using getData', () => {
           done(err)
           throw err
         }
-        mockHttp = nock(hostname)
+        mockHttp = nock(mockHostname)
           // .log(console.log)
-          .get('/data.hts')
+          .get(mockDataAPIEndpoint)
           .query({
             Service: 'Hilltop',
             Request: 'GetData',
@@ -60,6 +62,7 @@ describe('when using getData', () => {
     })
 
     When((done) => {
+      console.log('leinvoke lemock')
       ht.getData(siteName, measurementName, dateStart, dateEnd, interval)
         .then(
           success => {
@@ -67,6 +70,7 @@ describe('when using getData', () => {
             done()
           },
           fail => {
+            console.log('error happened WAT', fail)
             failCase = fail
             done()
           })

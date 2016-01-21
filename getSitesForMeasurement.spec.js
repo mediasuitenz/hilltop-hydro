@@ -3,14 +3,16 @@
 const expect = require('chai').expect
 const nock = require('nock')
 const fs = require('fs')
-const hostname = 'http://hydro.marlborough.govt.nz'
+const mockHostname = 'http://mockhostforhilltop.wat'
+const mockDataAPIEndpoint = '/data.hts'
+const hostname = mockHostname + mockDataAPIEndpoint
 
 describe('when using getSitesForMeasurement', () => {
   var ht
   var mockHttp
 
   Given(() => {
-    ht = require('./index')
+    ht = require('./index')(hostname)
   })
   Then('It should have a hilltop object', () => expect(ht).to.exist)
   Then('It should expose the url of the service', () => expect(ht.url).to.be.a('string'))
@@ -31,8 +33,8 @@ describe('when using getSitesForMeasurement', () => {
           done(err)
           throw err
         }
-        mockHttp = nock(hostname)
-          .get('/data.hts')
+        mockHttp = nock(mockHostname)
+          .get(mockDataAPIEndpoint)
           .query({
             Service: 'Hilltop',
             Request: 'SiteList',

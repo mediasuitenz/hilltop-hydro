@@ -1,6 +1,6 @@
 #hilltop hydro
 
-Provides api access to the hilltop API served by Marlborough district council, see http://hydro.marlborough.govt.nz/ for more information on the supported measurements.
+Provides api access to a hilltop API service, see http://www.hilltop.co.nz/
 
 ## Installation
 

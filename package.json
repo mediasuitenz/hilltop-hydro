@@ -1,6 +1,6 @@
 {
   "name": "hilltop-hydro",
-  "version": "0.1.0",
+  "version": "0.2.0",
   "description": "An api wrapper for the hilltop hydro service",
   "main": "index.js",
   "repository": {

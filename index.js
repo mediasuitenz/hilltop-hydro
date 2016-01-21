@@ -6,7 +6,7 @@
 // ## Installation
 //
 // ```
-// npm install --save @mediasuitenz/hilltophydro
+// npm install --save hilltop-hydro
 // ```
 //
 // ## Debugging

@@ -1,5 +1,5 @@
 //
-// #hilltop hydro
+// # hilltop hydro
 //
 // Provides api access to a hilltop API service, see http://www.hilltop.co.nz/
 //
@@ -9,12 +9,14 @@
 // npm install --save @mediasuitenz/hilltophydro
 // ```
 //
+// ## Debugging
+//
+// Use `DEBUG=hilltophydro node <yourApp>` to enable tracing for the hilltop module
 'use strict'
 var R = require('ramda')
 var request = require('request')
 var xml = require('xml2js')
 var chalk = require('chalk')
-// Use `DEBUG=hilltophydro node <yourApp>` to enable tracing for the hilltop module
 var debug = require('debug')('hilltophydro')
 
 var then = R.curry((cb, p) => p.then(cb))

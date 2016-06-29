@@ -43,12 +43,12 @@ function parseXmlString (dataString) {
 //  - API_URL this is the hostname + endpoint for the hilltop service
 //
 function buildLibrary (API_URL) {
-  var getFromApi = R.curry(function (requestType, site, measurement, from, to, interval) {
+  var getFromApi = R.curry(function (requestType, site, measurement, from, to, interval, alignment) {
     var defaultQsParams = {
       Service: 'Hilltop',
       Request: requestType
     }
-    debug(chalk.blue('\nurl: ', API_URL, '\nrequestType: ', requestType, '\nsite: ', site, '\nmeasurement: ', measurement, '\nfrom: ', from, '\nto: ', to, '\ninterval: ', interval))
+    debug(chalk.blue('\nurl: ', API_URL, '\nrequestType: ', requestType, '\nsite: ', site, '\nmeasurement: ', measurement, '\nfrom: ', from, '\nto: ', to, '\ninterval: ', interval, '\n alignment', alignment))
 
     return new Promise((resolve, reject) => {
       let queryParams = Object.assign(defaultQsParams, {
@@ -58,11 +58,16 @@ function buildLibrary (API_URL) {
         To: to,
         Interval: interval
       })
+
+      if (alignment) {
+        queryParams = Object.assign(queryParams, {Alignment: alignment})
+      }
       request(API_URL, {
         method: 'get',
         qs: queryParams
       }, (err, response, body) => {
         if (err) {
+          debug(chalk.red('error getting the url:', API_URL, ' msg:', err))
           reject(err)
         } else {
           resolve(body)
@@ -82,7 +87,7 @@ function buildLibrary (API_URL) {
   // ---
   // get data for a measurement, this function is curried
   //
-  // ` site -> measurement -> from -> to -> Promise<[]datums>`
+  // ` site -> measurement -> from -> to -> Optional<Alignment> -> Promise<[]datums>`
   //
   // params:
   //
@@ -90,6 +95,10 @@ function buildLibrary (API_URL) {
   // - measurement, the name of the measurement to query for
   // - from, the iso8061 string for the date to query from
   // - to, the iso8061 string for the date to query from
+  // - an alignment for the results, I.E for a 1 day interval you may want to align the query for 00:00 to get 24 hours of results from that time
+  //
+  // returns:
+  //
   // - datums {[Object]} an array of measurements { time: iso8061 string, value: number}
   //
   // Usage:
@@ -133,7 +142,7 @@ function buildLibrary (API_URL) {
   // ```
   //
   var getSitesForMeasurement = R.pipe(
-    getFromApi('SiteList', null, R.__, null, null, null),
+    getFromApi('SiteList', null, R.__, null, null, null, null),
     then(
       R.pipe(
         R.path(['HilltopServer', 'Site']),

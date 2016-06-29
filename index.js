@@ -87,7 +87,7 @@ function buildLibrary (API_URL) {
   // ---
   // get data for a measurement, this function is curried
   //
-  // ` site -> measurement -> from -> to -> Promise<[]datums>`
+  // ` site -> measurement -> from -> to -> Optional<Alignment> -> Promise<[]datums>`
   //
   // params:
   //
@@ -95,6 +95,10 @@ function buildLibrary (API_URL) {
   // - measurement, the name of the measurement to query for
   // - from, the iso8061 string for the date to query from
   // - to, the iso8061 string for the date to query from
+  // - an alignment for the results, I.E for a 1 day interval you may want to align the query for 00:00 to get 24 hours of results from that time
+  //
+  // returns:
+  //
   // - datums {[Object]} an array of measurements { time: iso8061 string, value: number}
   //
   // Usage:

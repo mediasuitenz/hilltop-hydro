@@ -43,12 +43,12 @@ function parseXmlString (dataString) {
 //  - API_URL this is the hostname + endpoint for the hilltop service
 //
 function buildLibrary (API_URL) {
-  var getFromApi = R.curry(function (requestType, site, measurement, from, to, interval, alignment) {
+  var getFromApi = R.curry(function (requestType, site, measurement, from, to, interval, alignment, collection) {
     var defaultQsParams = {
       Service: 'Hilltop',
       Request: requestType
     }
-    debug(chalk.blue('\nurl: ', API_URL, '\nrequestType: ', requestType, '\nsite: ', site, '\nmeasurement: ', measurement, '\nfrom: ', from, '\nto: ', to, '\ninterval: ', interval, '\n alignment', alignment))
+    debug(chalk.blue('\nurl: ', API_URL, '\nrequestType: ', requestType, '\nsite: ', site, '\nmeasurement: ', measurement, '\nfrom: ', from, '\nto: ', to, '\ninterval: ', interval, '\n alignment', alignment, '\n collection', collection))
 
     return new Promise((resolve, reject) => {
       let queryParams = Object.assign(defaultQsParams, {
@@ -56,7 +56,8 @@ function buildLibrary (API_URL) {
         Measurement: measurement,
         From: from,
         To: to,
-        Interval: interval
+        Interval: interval,
+        Collection: collection
       })
 
       if (alignment) {
@@ -80,6 +81,25 @@ function buildLibrary (API_URL) {
     return result.Hilltop.Measurement[0].Data[0].E
       .map((point) => {
         return {time: point.T[0], value: point['I1'][0]}
+      })
+  }
+
+  /**
+   * This method returns an array of result objects.  Note, each result object is of the form:
+   *  {time: <date>, values: <array of values>}
+   * This function is dependent on the values being returned in the correct order
+   * @param {Object} result - Hilltop results object
+   * @returns {Object[]}
+   */
+  function getDatumRangeFromResponse (result) {
+    return result.Hilltop.Measurement[0].Data[0].E
+      .map((point) => {
+        return {time: point.T[0], values: Object.keys(point).reduce((itemArray, key) => {
+          if (key[0] === 'I') {
+            itemArray.push(point[key][0])
+          }
+          return itemArray
+        }, [])}
       })
   }
 
@@ -115,8 +135,13 @@ function buildLibrary (API_URL) {
   // ```
   // output
   var getData = R.pipe(
-    getFromApi('GetData'),
+    getFromApi('GetData', R.__, R.__, R.__, R.__, R.__, R.__, null),
     then(getDatumsFromResponse)
+  )
+
+  var getDataRange = R.pipe(
+    getFromApi('GetData', R.__, R.__, R.__, R.__, R.__, R.__, null),
+    then(getDatumRangeFromResponse)
   )
 
   //
@@ -142,7 +167,20 @@ function buildLibrary (API_URL) {
   // ```
   //
   var getSitesForMeasurement = R.pipe(
-    getFromApi('SiteList', null, R.__, null, null, null, null),
+    getFromApi('SiteList', null, R.__, null, null, null, null, null),
+    then(
+      R.pipe(
+        R.path(['HilltopServer', 'Site']),
+        R.map(d => {
+          return { name: d['$'].Name }
+        })
+      )
+    )
+  )
+
+  // todo: comments
+  var getCollectionItems = R.pipe(
+    getFromApi('SiteList', null, null, null, null, null, null, R.__),
     then(
       R.pipe(
         R.path(['HilltopServer', 'Site']),
@@ -156,7 +194,9 @@ function buildLibrary (API_URL) {
   return {
     url: API_URL,
     getData: getData,
-    getSitesForMeasurement: getSitesForMeasurement
+    getDataRange: getDataRange,
+    getSitesForMeasurement: getSitesForMeasurement,
+    getCollectionItems: getCollectionItems
   }
 }
 
